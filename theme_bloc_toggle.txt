@@ -1,0 +1,27 @@
+class ThemeCubit extends Cubit<ThemeData> {
+  ThemeCubit() : super(_lightTheme);
+
+  void toggleTheme() {
+    emit(state.brightness == Brightness.light ? _darkTheme : _lightTheme);
+  }
+
+  static final ThemeData _lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primarySwatch: Colors.blue,
+    scaffoldBackgroundColor: Colors.grey[100],
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.white,
+    ),
+  );
+
+  static final ThemeData _darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.deepPurple,
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.deepPurple,
+      foregroundColor: Colors.white,
+    ),
+  );
+}

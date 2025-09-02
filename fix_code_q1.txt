@@ -1,0 +1,49 @@
+class _UsersPageState extends State<UsersPage> {
+  List users = [];
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();  
+    fetchUsers();
+  }
+
+  Future fetchUsers() async {
+    setState(() {
+      loading = true;
+    });
+
+    final res = await http.get(
+      Uri.parse("https://jsonplaceholder.typicode.com/users"), 
+    );
+
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      setState(() {
+        users = data; 
+        loading = false;
+      });
+    } else {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Users")),
+      body: loading
+          ? const Center(child: CircularProgressIndicator()) 
+          : ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (ctx, i) {
+                return ListTile(
+                  title: Text(users[i]['name']), 
+                );
+              },
+            ),
+    );
+  }
+}

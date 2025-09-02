@@ -1,0 +1,67 @@
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CounterProvider(), 
+      child: MyApp(),
+    ),
+  );
+}
+
+class CounterProvider with ChangeNotifier {
+  int count = 0;
+
+  void increment() {
+    count++;
+    notifyListeners();
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: FirstPage(),
+    );
+  }
+}
+
+class FirstPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Page 1")),
+      body: Center(
+        child: Consumer<CounterProvider>(
+          builder: (context, provider, child) {
+            return Text("Count: ${provider.count}"); 
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.read<CounterProvider>().increment(); 
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (ctx) => SecondPage()), 
+          );
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var provider = context.watch<CounterProvider>(); 
+
+    return Scaffold(
+      appBar: AppBar(title: Text("Page 2")),
+      body: Center(
+        child: Text("Count: ${provider.count}"), 
+      ),
+    );
+  }
+}
